@@ -1,16 +1,22 @@
 const express = require('express');
-const { getPool } = require('../db');
+const { Product } = require('../db');
 
 const router = express.Router();
 
 router.get('/', async (_req, res) => {
   try {
-    const pool = getPool();
-    const [rows] = await pool.query(
-      'SELECT id, name, description, category, price, created_at, updated_at FROM products ORDER BY created_at DESC'
-    );
+    const products = await Product.find().sort({ createdAt: -1 }).lean();
+    const normalized = products.map((product) => ({
+      id: product._id,
+      name: product.name,
+      description: product.description,
+      category: product.category,
+      price: product.price,
+      created_at: product.createdAt,
+      updated_at: product.updatedAt
+    }));
 
-    res.json(rows);
+    res.json(normalized);
   } catch (error) {
     console.error('Erro ao listar produtos', error);
     res.status(500).json({ message: 'Erro interno ao buscar produtos' });
@@ -19,17 +25,21 @@ router.get('/', async (_req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    const pool = getPool();
-    const [rows] = await pool.query(
-      'SELECT id, name, description, category, price, created_at, updated_at FROM products WHERE id = ?',
-      [req.params.id]
-    );
+    const product = await Product.findById(req.params.id).lean();
 
-    if (!rows.length) {
+    if (!product) {
       return res.status(404).json({ message: 'Produto não encontrado' });
     }
 
-    res.json(rows[0]);
+    res.json({
+      id: product._id,
+      name: product.name,
+      description: product.description,
+      category: product.category,
+      price: product.price,
+      created_at: product.createdAt,
+      updated_at: product.updatedAt
+    });
   } catch (error) {
     console.error('Erro ao buscar produto', error);
     res.status(500).json({ message: 'Erro interno ao buscar produto' });
@@ -44,18 +54,22 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    const pool = getPool();
-    const [result] = await pool.query(
-      'INSERT INTO products (name, description, category, price) VALUES (?, ?, ?, ?)',
-      [name, description || null, category, Number(price)]
-    );
+    const product = await Product.create({
+      name,
+      description: description || undefined,
+      category,
+      price: Number(price)
+    });
 
-    const [rows] = await pool.query(
-      'SELECT id, name, description, category, price, created_at, updated_at FROM products WHERE id = ?',
-      [result.insertId]
-    );
-
-    res.status(201).json(rows[0]);
+    res.status(201).json({
+      id: product._id,
+      name: product.name,
+      description: product.description,
+      category: product.category,
+      price: product.price,
+      created_at: product.createdAt,
+      updated_at: product.updatedAt
+    });
   } catch (error) {
     console.error('Erro ao criar produto', error);
     res.status(500).json({ message: 'Erro interno ao criar produto' });
@@ -70,29 +84,32 @@ router.put('/:id', async (req, res) => {
   }
 
   try {
-    const pool = getPool();
-    const [existing] = await pool.query('SELECT id FROM products WHERE id = ?', [req.params.id]);
+    const existing = await Product.findById(req.params.id);
 
-    if (!existing.length) {
+    if (!existing) {
       return res.status(404).json({ message: 'Produto não encontrado' });
     }
 
-    await pool.query(
-      `UPDATE products SET 
-        name = COALESCE(?, name),
-        description = COALESCE(?, description),
-        category = COALESCE(?, category),
-        price = COALESCE(?, price)
-      WHERE id = ?`,
-      [name, description, category, price !== undefined ? Number(price) : null, req.params.id]
-    );
+    const updated = await Product.findByIdAndUpdate(
+      req.params.id,
+      {
+        ...(name !== undefined ? { name } : {}),
+        ...(description !== undefined ? { description } : {}),
+        ...(category !== undefined ? { category } : {}),
+        ...(price !== undefined ? { price: Number(price) } : {})
+      },
+      { new: true, runValidators: true }
+    ).lean();
 
-    const [rows] = await pool.query(
-      'SELECT id, name, description, category, price, created_at, updated_at FROM products WHERE id = ?',
-      [req.params.id]
-    );
-
-    res.json(rows[0]);
+    res.json({
+      id: updated._id,
+      name: updated.name,
+      description: updated.description,
+      category: updated.category,
+      price: updated.price,
+      created_at: updated.createdAt,
+      updated_at: updated.updatedAt
+    });
   } catch (error) {
     console.error('Erro ao atualizar produto', error);
     res.status(500).json({ message: 'Erro interno ao atualizar produto' });
@@ -101,10 +118,9 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   try {
-    const pool = getPool();
-    const [result] = await pool.query('DELETE FROM products WHERE id = ?', [req.params.id]);
+    const result = await Product.findByIdAndDelete(req.params.id);
 
-    if (result.affectedRows === 0) {
+    if (!result) {
       return res.status(404).json({ message: 'Produto não encontrado' });
     }
 
