@@ -1,4 +1,4 @@
-const { Work } = require('../db');
+const { Work } = require("../db");
 
 async function listWork(_req, res) {
   try {
@@ -14,13 +14,13 @@ async function listWork(_req, res) {
       finish: work.finish,
       description: work.description,
       created_at: work.createdAt,
-      updated_at: work.updatedAt
+      updated_at: work.updatedAt,
     }));
 
     res.json(normalized);
   } catch (error) {
-    console.error('Erro ao listar trabalhos', error);
-    res.status(500).json({ message: 'Erro interno ao buscar trabalhos' });
+    console.error("Erro ao listar trabalhos", error);
+    res.status(500).json({ message: "Erro interno ao buscar trabalhos" });
   }
 }
 
@@ -29,7 +29,7 @@ async function getWork(req, res) {
     const work = await Work.findById(req.params.id).lean();
 
     if (!work) {
-      return res.status(404).json({ message: 'Trabalho não encontrado' });
+      return res.status(404).json({ message: "Trabalho não encontrado" });
     }
 
     res.json({
@@ -43,11 +43,11 @@ async function getWork(req, res) {
       finish: work.finish,
       description: work.description,
       created_at: work.createdAt,
-      updated_at: work.updatedAt
+      updated_at: work.updatedAt,
     });
   } catch (error) {
-    console.error('Erro ao buscar trabalho', error);
-    res.status(500).json({ message: 'Erro interno ao buscar trabalho' });
+    console.error("Erro ao buscar trabalho", error);
+    res.status(500).json({ message: "Erro interno ao buscar trabalho" });
   }
 }
 
@@ -60,13 +60,13 @@ async function createWork(req, res) {
     amount,
     materialType,
     finish,
-    description
+    description,
   } = req.body;
 
   if (!status || !name || amount === undefined) {
     return res
       .status(400)
-      .json({ message: 'Campos obrigatórios: status, name e amount' });
+      .json({ message: "Campos obrigatórios: status, name e amount" });
   }
 
   try {
@@ -78,8 +78,9 @@ async function createWork(req, res) {
       amount: Number(amount),
       materialType: materialType || undefined,
       finish: finish || undefined,
-      description: description || undefined
+      description: description || undefined,
     });
+    console.log("work criado");
 
     res.status(201).json({
       id: work._id,
@@ -92,11 +93,11 @@ async function createWork(req, res) {
       finish: work.finish,
       description: work.description,
       created_at: work.createdAt,
-      updated_at: work.updatedAt
+      updated_at: work.updatedAt,
     });
   } catch (error) {
-    console.error('Erro ao criar trabalho', error);
-    res.status(500).json({ message: 'Erro interno ao criar trabalho' });
+    console.error("Erro ao criar trabalho", error);
+    res.status(500).json({ message: "Erro interno ao criar trabalho" });
   }
 }
 
@@ -109,7 +110,7 @@ async function updateWork(req, res) {
     amount,
     materialType,
     finish,
-    description
+    description,
   } = req.body;
 
   if (
@@ -124,14 +125,14 @@ async function updateWork(req, res) {
   ) {
     return res
       .status(400)
-      .json({ message: 'Informe ao menos um campo para atualização' });
+      .json({ message: "Informe ao menos um campo para atualização" });
   }
 
   try {
     const existing = await Work.findById(req.params.id);
 
     if (!existing) {
-      return res.status(404).json({ message: 'Trabalho não encontrado' });
+      return res.status(404).json({ message: "Trabalho não encontrado" });
     }
 
     const updated = await Work.findByIdAndUpdate(
@@ -148,7 +149,7 @@ async function updateWork(req, res) {
         ...(amount !== undefined ? { amount: Number(amount) } : {}),
         ...(materialType !== undefined ? { materialType } : {}),
         ...(finish !== undefined ? { finish } : {}),
-        ...(description !== undefined ? { description } : {})
+        ...(description !== undefined ? { description } : {}),
       },
       { new: true, runValidators: true }
     ).lean();
@@ -164,11 +165,11 @@ async function updateWork(req, res) {
       finish: updated.finish,
       description: updated.description,
       created_at: updated.createdAt,
-      updated_at: updated.updatedAt
+      updated_at: updated.updatedAt,
     });
   } catch (error) {
-    console.error('Erro ao atualizar trabalho', error);
-    res.status(500).json({ message: 'Erro interno ao atualizar trabalho' });
+    console.error("Erro ao atualizar trabalho", error);
+    res.status(500).json({ message: "Erro interno ao atualizar trabalho" });
   }
 }
 
@@ -177,13 +178,13 @@ async function deleteWork(req, res) {
     const result = await Work.findByIdAndDelete(req.params.id);
 
     if (!result) {
-      return res.status(404).json({ message: 'Trabalho não encontrado' });
+      return res.status(404).json({ message: "Trabalho não encontrado" });
     }
 
     res.status(204).send();
   } catch (error) {
-    console.error('Erro ao remover trabalho', error);
-    res.status(500).json({ message: 'Erro interno ao remover trabalho' });
+    console.error("Erro ao remover trabalho", error);
+    res.status(500).json({ message: "Erro interno ao remover trabalho" });
   }
 }
 
@@ -192,5 +193,5 @@ module.exports = {
   getWork,
   createWork,
   updateWork,
-  deleteWork
+  deleteWork,
 };
