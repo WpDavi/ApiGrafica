@@ -1,6 +1,7 @@
 const express = require('express');
 const { initDb, dbConfig } = require('./db');
 const productRoutes = require('./routes/products');
+const workRoutes = require('./routes/work');
 
 async function startServer() {
   await initDb();
@@ -13,6 +14,7 @@ async function startServer() {
   });
 
   app.use('/products', productRoutes);
+  app.use('/work', workRoutes);
 
   const port = process.env.PORT || 3000;
   app.listen(port, () => {

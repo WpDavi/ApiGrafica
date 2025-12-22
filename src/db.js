@@ -21,6 +21,24 @@ const productSchema = new mongoose.Schema(
 
 const Product = mongoose.model("Product", productSchema);
 
+const workSchema = new mongoose.Schema(
+  {
+    status: { type: String, required: true, trim: true },
+    name: { type: String, required: true, trim: true },
+    startDate: { type: Date },
+    endDate: { type: Date },
+    amount: { type: Number, default: 0 },
+    materialType: { type: String, trim: true },
+    finish: { type: String, trim: true },
+    description: { type: String },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+const Work = mongoose.model("Work", workSchema);
+
 async function ensureSeedData() {
   const total = await Product.countDocuments();
   if (total === 0) {
@@ -54,4 +72,4 @@ async function initDb() {
   return mongoose.connection;
 }
 
-module.exports = { dbConfig, initDb, Product };
+module.exports = { dbConfig, initDb, Product, Work };
