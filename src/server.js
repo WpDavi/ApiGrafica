@@ -9,7 +9,7 @@ async function startServer() {
   app.use(express.json());
 
   app.get('/', (_req, res) => {
-    res.json({ message: 'API da gráfica operante', database: dbConfig.database });
+    res.json({ message: 'API da gráfica operante', database: dbConfig.dbName });
   });
 
   app.use('/products', productRoutes);
