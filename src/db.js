@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const Product = require("./models/Product");
+const Work = require("./models/Work");
 
 const dbConfig = {
   url:
@@ -6,38 +8,6 @@ const dbConfig = {
     "mongodb+srv://wpdavi:bleknit007@utam.kztzo.mongodb.net/?retryWrites=true&w=majority&appName=UTAM",
   dbName: process.env.MONGO_DB || "grafica",
 };
-
-const productSchema = new mongoose.Schema(
-  {
-    name: { type: String, required: true, trim: true },
-    description: { type: String },
-    category: { type: String, required: true, trim: true },
-    price: { type: Number, required: true, default: 0 },
-  },
-  {
-    timestamps: true,
-  }
-);
-
-const Product = mongoose.model("Product", productSchema);
-
-const workSchema = new mongoose.Schema(
-  {
-    status: { type: String, required: true, trim: true },
-    name: { type: String, required: true, trim: true },
-    startDate: { type: Date },
-    endDate: { type: Date },
-    amount: { type: Number, default: 0 },
-    materialType: { type: String, trim: true },
-    finish: { type: String, trim: true },
-    description: { type: String },
-  },
-  {
-    timestamps: true,
-  }
-);
-
-const Work = mongoose.model("Work", workSchema);
 
 async function ensureSeedData() {
   const total = await Product.countDocuments();
