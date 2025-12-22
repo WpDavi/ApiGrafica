@@ -35,6 +35,7 @@ async function initDb() {
   if (mongoose.connection.readyState === 1) return mongoose.connection;
 
   await mongoose.connect(dbConfig.url, { dbName: dbConfig.dbName });
+  console.log(`Conectado ao MongoDB: ${dbConfig.dbName}`);
   await ensureSeedData();
 
   return mongoose.connection;
