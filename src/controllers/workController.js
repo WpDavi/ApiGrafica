@@ -61,6 +61,7 @@ async function createWork(req, res) {
     materialType,
     finish,
     description,
+    image,
   } = req.body;
 
   if (!status || !name || amount === undefined) {
@@ -79,6 +80,7 @@ async function createWork(req, res) {
       materialType: materialType || undefined,
       finish: finish || undefined,
       description: description || undefined,
+      image: image || undefined,
     });
     console.log("work criado");
 

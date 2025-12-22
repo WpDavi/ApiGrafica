@@ -10,6 +10,7 @@ const workSchema = new mongoose.Schema(
     materialType: { type: String, trim: true },
     finish: { type: String, trim: true },
     description: { type: String },
+    image: { type: String },
   },
   {
     timestamps: true,
