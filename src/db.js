@@ -34,7 +34,18 @@ async function ensureSeedData() {
 async function initDb() {
   if (mongoose.connection.readyState === 1) return mongoose.connection;
 
-  await mongoose.connect(dbConfig.url, { dbName: dbConfig.dbName });
+  try {
+    await mongoose.connect(dbConfig.url, { dbName: dbConfig.dbName });
+  } catch (error) {
+    const message = [
+      'Falha ao conectar no MongoDB.',
+      `URL: ${dbConfig.url}`,
+      `Banco: ${dbConfig.dbName}`,
+      'Verifique se o serviço do MongoDB está ativo ou defina MONGO_URL.'
+    ].join(' ');
+    error.message = `${message}\n${error.message}`;
+    throw error;
+  }
   console.log(`Conectado ao MongoDB: ${dbConfig.dbName}`);
   await ensureSeedData();
 
