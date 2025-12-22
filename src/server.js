@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const { initDb, dbConfig } = require('./db');
 const productRoutes = require('./routes/products');
 const workRoutes = require('./routes/work');
@@ -7,6 +8,7 @@ async function startServer() {
   await initDb();
 
   const app = express();
+  app.use(cors());
   app.use(express.json());
 
   app.get('/', (_req, res) => {
