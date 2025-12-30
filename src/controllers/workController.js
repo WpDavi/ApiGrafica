@@ -7,12 +7,18 @@ async function listWork(_req, res) {
       id: work._id,
       status: work.status,
       name: work.name,
+      fone: work.fone,
       startDate: work.startDate,
       endDate: work.endDate,
       amount: work.amount,
       materialType: work.materialType,
       finish: work.finish,
       description: work.description,
+      serviceType: work.serviceType,
+      measure: work.measure,
+      entryServiceValue: work.entryServiceValue,
+      serviceValue: work.serviceValue,
+      delyveryForecast: work.delyveryForecast,
       created_at: work.createdAt,
       updated_at: work.updatedAt,
     }));
@@ -36,12 +42,18 @@ async function getWork(req, res) {
       id: work._id,
       status: work.status,
       name: work.name,
+      fone: work.fone,
       startDate: work.startDate,
       endDate: work.endDate,
       amount: work.amount,
       materialType: work.materialType,
       finish: work.finish,
       description: work.description,
+      serviceType: work.serviceType,
+      measure: work.measure,
+      entryServiceValue: work.entryServiceValue,
+      serviceValue: work.serviceValue,
+      delyveryForecast: work.delyveryForecast,
       created_at: work.createdAt,
       updated_at: work.updatedAt,
     });
@@ -55,31 +67,43 @@ async function createWork(req, res) {
   const {
     status,
     name,
+    fone,
     startDate,
     endDate,
     amount,
     materialType,
     finish,
     description,
+    serviceType,
+    measure,
+    entryServiceValue,
+    serviceValue,
+    delyveryForecast,
     image,
   } = req.body;
 
-  if (!status || !name || amount === undefined) {
+  if (!status || !name || !fone || amount === undefined) {
     return res
       .status(400)
-      .json({ message: "Campos obrigatórios: status, name e amount" });
+      .json({ message: "Campos obrigatórios: status, name, fone e amount" });
   }
 
   try {
     const work = await Work.create({
       status,
       name,
+      fone,
       startDate: startDate ? new Date(startDate) : undefined,
       endDate: endDate ? new Date(endDate) : undefined,
       amount: Number(amount),
       materialType: materialType || undefined,
       finish: finish || undefined,
       description: description || undefined,
+      serviceType: serviceType || undefined,
+      measure: measure || undefined,
+      entryServiceValue: entryServiceValue || undefined,
+      serviceValue: serviceValue || undefined,
+      delyveryForecast: delyveryForecast || undefined,
       image: image || undefined,
     });
     console.log("work criado");
@@ -88,12 +112,18 @@ async function createWork(req, res) {
       id: work._id,
       status: work.status,
       name: work.name,
+      fone: work.fone,
       startDate: work.startDate,
       endDate: work.endDate,
       amount: work.amount,
       materialType: work.materialType,
       finish: work.finish,
       description: work.description,
+      serviceType: work.serviceType,
+      measure: work.measure,
+      entryServiceValue: work.entryServiceValue,
+      serviceValue: work.serviceValue,
+      delyveryForecast: work.delyveryForecast,
       created_at: work.createdAt,
       updated_at: work.updatedAt,
     });
@@ -107,23 +137,35 @@ async function updateWork(req, res) {
   const {
     status,
     name,
+    fone,
     startDate,
     endDate,
     amount,
     materialType,
     finish,
     description,
+    serviceType,
+    measure,
+    entryServiceValue,
+    serviceValue,
+    delyveryForecast,
   } = req.body;
 
   if (
     !status &&
     !name &&
+    fone === undefined &&
     startDate === undefined &&
     endDate === undefined &&
     amount === undefined &&
     materialType === undefined &&
     finish === undefined &&
-    description === undefined
+    description === undefined &&
+    serviceType === undefined &&
+    measure === undefined &&
+    entryServiceValue === undefined &&
+    serviceValue === undefined &&
+    delyveryForecast === undefined
   ) {
     return res
       .status(400)
@@ -142,6 +184,7 @@ async function updateWork(req, res) {
       {
         ...(status !== undefined ? { status } : {}),
         ...(name !== undefined ? { name } : {}),
+        ...(fone !== undefined ? { fone } : {}),
         ...(startDate !== undefined
           ? { startDate: startDate ? new Date(startDate) : null }
           : {}),
@@ -152,6 +195,11 @@ async function updateWork(req, res) {
         ...(materialType !== undefined ? { materialType } : {}),
         ...(finish !== undefined ? { finish } : {}),
         ...(description !== undefined ? { description } : {}),
+        ...(serviceType !== undefined ? { serviceType } : {}),
+        ...(measure !== undefined ? { measure } : {}),
+        ...(entryServiceValue !== undefined ? { entryServiceValue } : {}),
+        ...(serviceValue !== undefined ? { serviceValue } : {}),
+        ...(delyveryForecast !== undefined ? { delyveryForecast } : {}),
       },
       { new: true, runValidators: true }
     ).lean();
@@ -160,12 +208,18 @@ async function updateWork(req, res) {
       id: updated._id,
       status: updated.status,
       name: updated.name,
+      fone: updated.fone,
       startDate: updated.startDate,
       endDate: updated.endDate,
       amount: updated.amount,
       materialType: updated.materialType,
       finish: updated.finish,
       description: updated.description,
+      serviceType: updated.serviceType,
+      measure: updated.measure,
+      entryServiceValue: updated.entryServiceValue,
+      serviceValue: updated.serviceValue,
+      delyveryForecast: updated.delyveryForecast,
       created_at: updated.createdAt,
       updated_at: updated.updatedAt,
     });
