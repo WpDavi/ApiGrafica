@@ -1,5 +1,9 @@
 const { Work } = require("../db");
 
+function normalizeOptional(value) {
+  return value === "" ? undefined : value;
+}
+
 function normalizeWork(work) {
   return {
     id: work._id,
@@ -157,13 +161,13 @@ async function createWork(req, res) {
       designer,
       startDate: startDate ? new Date(startDate) : undefined,
       endDate: endDate ? new Date(endDate) : undefined,
-      amount: amount,
-      amount2: amount2 == undefined,
-      amount3: amount3 == undefined,
-      amount4: amount4 == undefined,
-      amount5: amount5 == undefined,
-      amount6: amount6 == undefined,
-      amount7: amount7 == undefined,
+      amount: normalizeOptional(amount),
+      amount2: normalizeOptional(amount2),
+      amount3: normalizeOptional(amount3),
+      amount4: normalizeOptional(amount4),
+      amount5: normalizeOptional(amount5),
+      amount6: normalizeOptional(amount6),
+      amount7: normalizeOptional(amount7),
       materialType: materialType || undefined,
       materialType2: materialType2 || undefined,
       materialType3: materialType3 || undefined,
@@ -338,62 +342,122 @@ async function updateWork(req, res) {
     const updated = await Work.findByIdAndUpdate(
       req.params.id,
       {
-        ...(status !== undefined ? { status } : {}),
-        ...(name !== undefined ? { name } : {}),
-        ...(fone !== undefined ? { fone } : {}),
-        ...(designer !== undefined ? { designer } : {}),
+        ...(status !== undefined ? { status: normalizeOptional(status) } : {}),
+        ...(name !== undefined ? { name: normalizeOptional(name) } : {}),
+        ...(fone !== undefined ? { fone: normalizeOptional(fone) } : {}),
+        ...(designer !== undefined ? { designer: normalizeOptional(designer) } : {}),
         ...(startDate !== undefined
           ? { startDate: startDate ? new Date(startDate) : null }
           : {}),
         ...(endDate !== undefined
           ? { endDate: endDate ? new Date(endDate) : null }
           : {}),
-        ...(amount !== undefined ? { amount: Number(amount) } : {}),
-        ...(amount2 !== undefined ? { amount2: Number(amount2) } : {}),
-        ...(amount3 !== undefined ? { amount3: Number(amount3) } : {}),
-        ...(amount4 !== undefined ? { amount4: Number(amount4) } : {}),
-        ...(amount5 !== undefined ? { amount5: Number(amount5) } : {}),
-        ...(amount6 !== undefined ? { amount6: Number(amount6) } : {}),
-        ...(amount7 !== undefined ? { amount7: Number(amount7) } : {}),
-        ...(materialType !== undefined ? { materialType } : {}),
-        ...(materialType2 !== undefined ? { materialType2 } : {}),
-        ...(materialType3 !== undefined ? { materialType3 } : {}),
-        ...(materialType4 !== undefined ? { materialType4 } : {}),
-        ...(materialType5 !== undefined ? { materialType5 } : {}),
-        ...(materialType6 !== undefined ? { materialType6 } : {}),
-        ...(materialType7 !== undefined ? { materialType7 } : {}),
-        ...(finish !== undefined ? { finish } : {}),
-        ...(finish2 !== undefined ? { finish2 } : {}),
-        ...(finish3 !== undefined ? { finish3 } : {}),
-        ...(finish4 !== undefined ? { finish4 } : {}),
-        ...(finish5 !== undefined ? { finish5 } : {}),
-        ...(finish6 !== undefined ? { finish6 } : {}),
-        ...(finish7 !== undefined ? { finish7 } : {}),
-        ...(description !== undefined ? { description } : {}),
-        ...(description2 !== undefined ? { description2 } : {}),
-        ...(description3 !== undefined ? { description3 } : {}),
-        ...(description4 !== undefined ? { description4 } : {}),
-        ...(description5 !== undefined ? { description5 } : {}),
-        ...(description6 !== undefined ? { description6 } : {}),
-        ...(description7 !== undefined ? { description7 } : {}),
-        ...(serviceType !== undefined ? { serviceType } : {}),
-        ...(serviceType2 !== undefined ? { serviceType2 } : {}),
-        ...(serviceType3 !== undefined ? { serviceType3 } : {}),
-        ...(serviceType4 !== undefined ? { serviceType4 } : {}),
-        ...(serviceType5 !== undefined ? { serviceType5 } : {}),
-        ...(serviceType6 !== undefined ? { serviceType6 } : {}),
-        ...(serviceType7 !== undefined ? { serviceType7 } : {}),
-        ...(measure !== undefined ? { measure } : {}),
-        ...(measure2 !== undefined ? { measure2 } : {}),
-        ...(measure3 !== undefined ? { measure3 } : {}),
-        ...(measure4 !== undefined ? { measure4 } : {}),
-        ...(measure5 !== undefined ? { measure5 } : {}),
-        ...(measure6 !== undefined ? { measure6 } : {}),
-        ...(measure7 !== undefined ? { measure7 } : {}),
-        ...(entryServiceValue !== undefined ? { entryServiceValue } : {}),
-        ...(serviceValue !== undefined ? { serviceValue } : {}),
-        ...(delyveryForecast !== undefined ? { delyveryForecast } : {}),
-        ...(image !== undefined ? { image } : {}),
+        ...(amount !== undefined ? { amount: normalizeOptional(amount) } : {}),
+        ...(amount2 !== undefined ? { amount2: normalizeOptional(amount2) } : {}),
+        ...(amount3 !== undefined ? { amount3: normalizeOptional(amount3) } : {}),
+        ...(amount4 !== undefined ? { amount4: normalizeOptional(amount4) } : {}),
+        ...(amount5 !== undefined ? { amount5: normalizeOptional(amount5) } : {}),
+        ...(amount6 !== undefined ? { amount6: normalizeOptional(amount6) } : {}),
+        ...(amount7 !== undefined ? { amount7: normalizeOptional(amount7) } : {}),
+        ...(materialType !== undefined
+          ? { materialType: normalizeOptional(materialType) }
+          : {}),
+        ...(materialType2 !== undefined
+          ? { materialType2: normalizeOptional(materialType2) }
+          : {}),
+        ...(materialType3 !== undefined
+          ? { materialType3: normalizeOptional(materialType3) }
+          : {}),
+        ...(materialType4 !== undefined
+          ? { materialType4: normalizeOptional(materialType4) }
+          : {}),
+        ...(materialType5 !== undefined
+          ? { materialType5: normalizeOptional(materialType5) }
+          : {}),
+        ...(materialType6 !== undefined
+          ? { materialType6: normalizeOptional(materialType6) }
+          : {}),
+        ...(materialType7 !== undefined
+          ? { materialType7: normalizeOptional(materialType7) }
+          : {}),
+        ...(finish !== undefined ? { finish: normalizeOptional(finish) } : {}),
+        ...(finish2 !== undefined ? { finish2: normalizeOptional(finish2) } : {}),
+        ...(finish3 !== undefined ? { finish3: normalizeOptional(finish3) } : {}),
+        ...(finish4 !== undefined ? { finish4: normalizeOptional(finish4) } : {}),
+        ...(finish5 !== undefined ? { finish5: normalizeOptional(finish5) } : {}),
+        ...(finish6 !== undefined ? { finish6: normalizeOptional(finish6) } : {}),
+        ...(finish7 !== undefined ? { finish7: normalizeOptional(finish7) } : {}),
+        ...(description !== undefined
+          ? { description: normalizeOptional(description) }
+          : {}),
+        ...(description2 !== undefined
+          ? { description2: normalizeOptional(description2) }
+          : {}),
+        ...(description3 !== undefined
+          ? { description3: normalizeOptional(description3) }
+          : {}),
+        ...(description4 !== undefined
+          ? { description4: normalizeOptional(description4) }
+          : {}),
+        ...(description5 !== undefined
+          ? { description5: normalizeOptional(description5) }
+          : {}),
+        ...(description6 !== undefined
+          ? { description6: normalizeOptional(description6) }
+          : {}),
+        ...(description7 !== undefined
+          ? { description7: normalizeOptional(description7) }
+          : {}),
+        ...(serviceType !== undefined
+          ? { serviceType: normalizeOptional(serviceType) }
+          : {}),
+        ...(serviceType2 !== undefined
+          ? { serviceType2: normalizeOptional(serviceType2) }
+          : {}),
+        ...(serviceType3 !== undefined
+          ? { serviceType3: normalizeOptional(serviceType3) }
+          : {}),
+        ...(serviceType4 !== undefined
+          ? { serviceType4: normalizeOptional(serviceType4) }
+          : {}),
+        ...(serviceType5 !== undefined
+          ? { serviceType5: normalizeOptional(serviceType5) }
+          : {}),
+        ...(serviceType6 !== undefined
+          ? { serviceType6: normalizeOptional(serviceType6) }
+          : {}),
+        ...(serviceType7 !== undefined
+          ? { serviceType7: normalizeOptional(serviceType7) }
+          : {}),
+        ...(measure !== undefined ? { measure: normalizeOptional(measure) } : {}),
+        ...(measure2 !== undefined
+          ? { measure2: normalizeOptional(measure2) }
+          : {}),
+        ...(measure3 !== undefined
+          ? { measure3: normalizeOptional(measure3) }
+          : {}),
+        ...(measure4 !== undefined
+          ? { measure4: normalizeOptional(measure4) }
+          : {}),
+        ...(measure5 !== undefined
+          ? { measure5: normalizeOptional(measure5) }
+          : {}),
+        ...(measure6 !== undefined
+          ? { measure6: normalizeOptional(measure6) }
+          : {}),
+        ...(measure7 !== undefined
+          ? { measure7: normalizeOptional(measure7) }
+          : {}),
+        ...(entryServiceValue !== undefined
+          ? { entryServiceValue: normalizeOptional(entryServiceValue) }
+          : {}),
+        ...(serviceValue !== undefined
+          ? { serviceValue: normalizeOptional(serviceValue) }
+          : {}),
+        ...(delyveryForecast !== undefined
+          ? { delyveryForecast: normalizeOptional(delyveryForecast) }
+          : {}),
+        ...(image !== undefined ? { image: normalizeOptional(image) } : {}),
       },
       { new: true, runValidators: true }
     ).lean();
