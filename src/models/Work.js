@@ -9,6 +9,10 @@ const workSchema = new mongoose.Schema(
     startDate: { type: Date },
     endDate: { type: Date },
 
+    numbered: { type: Boolean },
+    chopped: { type: Boolean },
+    routes: { type: String },
+
     amount: { type: String },
     serviceType: { type: String, trim: true },
     materialType: { type: String, trim: true },
