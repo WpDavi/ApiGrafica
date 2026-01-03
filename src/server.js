@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const { initDb, dbConfig } = require('./db');
 const productRoutes = require('./routes/products');
@@ -14,6 +15,12 @@ async function startServer() {
 
   app.get('/', (_req, res) => {
     res.json({ message: 'API da gráfica operante', database: dbConfig.dbName });
+  });
+
+  const appStaticPath = path.join(__dirname, 'public', 'app');
+  app.use('/app', express.static(appStaticPath));
+  app.get('/app/*', (_req, res) => {
+    res.sendFile(path.join(appStaticPath, 'index.html'));
   });
 
   app.use('/products', productRoutes);
