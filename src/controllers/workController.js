@@ -9,6 +9,9 @@ function normalizeWork(work) {
     designer: work.designer,
     startDate: work.startDate,
     endDate: work.endDate,
+    numbered: work.numbered,
+    chopped: work.chopped,
+    routes: work.routes,
     amount: work.amount,
     materialType: work.materialType,
     finish: work.finish,
@@ -95,6 +98,9 @@ async function createWork(req, res) {
     designer,
     startDate,
     endDate,
+    numbered,
+    chopped,
+    routes,
     amount,
     amount2,
     amount3,
@@ -157,6 +163,9 @@ async function createWork(req, res) {
       designer,
       startDate: startDate ? new Date(startDate) : undefined,
       endDate: endDate ? new Date(endDate) : undefined,
+      numbered,
+      chopped,
+      routes,
       amount: amount,
       amount2: amount2 == undefined,
       amount3: amount3 == undefined,
@@ -221,6 +230,9 @@ async function updateWork(req, res) {
     designer,
     startDate,
     endDate,
+    numbered,
+    chopped,
+    routes,
     amount,
     amount2,
     amount3,
@@ -277,6 +289,9 @@ async function updateWork(req, res) {
     startDate === undefined &&
     endDate === undefined &&
     amount === undefined &&
+    numbered === undefined &&
+    chopped === undefined &&
+    routes === undefined &&
     amount2 === undefined &&
     amount3 === undefined &&
     amount4 === undefined &&
@@ -348,6 +363,9 @@ async function updateWork(req, res) {
         ...(endDate !== undefined
           ? { endDate: endDate ? new Date(endDate) : null }
           : {}),
+        ...(numbered !== undefined ? { numbered } : {}),
+        ...(chopped !== undefined ? { chopped } : {}),
+        ...(routes !== undefined ? { routes } : {}),
         ...(amount !== undefined ? { amount: Number(amount) } : {}),
         ...(amount2 !== undefined ? { amount2: Number(amount2) } : {}),
         ...(amount3 !== undefined ? { amount3: Number(amount3) } : {}),
