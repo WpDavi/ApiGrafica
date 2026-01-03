@@ -3,6 +3,7 @@ const cors = require('cors');
 const { initDb, dbConfig } = require('./db');
 const productRoutes = require('./routes/products');
 const workRoutes = require('./routes/work');
+const contactRoutes = require('./routes/contacts');
 
 async function startServer() {
   await initDb();
@@ -17,6 +18,7 @@ async function startServer() {
 
   app.use('/products', productRoutes);
   app.use('/work', workRoutes);
+  app.use('/contacts', contactRoutes);
 
   const port = process.env.PORT || 3000;
   app.listen(port, () => {

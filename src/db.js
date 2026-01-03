@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Product = require("./models/Product");
 const Work = require("./models/Work");
+const Contact = require("./models/Contact");
 
 const dbConfig = {
   url:
@@ -42,4 +43,4 @@ async function initDb() {
   return mongoose.connection;
 }
 
-module.exports = { dbConfig, initDb, Product, Work };
+module.exports = { dbConfig, initDb, Product, Work, Contact };
