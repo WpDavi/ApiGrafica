@@ -33,24 +33,47 @@ async function startServer() {
     console.log(`Servidor rodando na porta ${port}`);
   });
 
-  startLocalTunnel(port).catch((error) => {
-    console.error('Não foi possível iniciar o localtunnel', error);
-  });
+  if (process.env.ENABLE_TUNNEL !== 'false') {
+    startLocalTunnel(port).catch((error) => {
+      console.error('Não foi possível iniciar o localtunnel', error);
+    });
+  }
 
   return server;
 }
 
 async function startLocalTunnel(port) {
-  const subdomain = process.env.TUNNEL_SUBDOMAIN || 'grafica';
-  const tunnel = await localtunnel({ port, subdomain });
+  const preferredSubdomain = process.env.TUNNEL_SUBDOMAIN || 'grafica';
+  const attempt = async (subdomain) => {
+    return localtunnel({ port, subdomain });
+  };
 
+  try {
+    const tunnel = await attempt(preferredSubdomain);
+    logTunnelLifecycle(tunnel);
+    return tunnel;
+  } catch (error) {
+    console.warn(`Falha ao iniciar o túnel com o subdomínio "${preferredSubdomain}".`, error?.message || error);
+
+    const fallbackSubdomain = `grafica-${Date.now().toString(36)}`;
+
+    try {
+      const tunnel = await attempt(fallbackSubdomain);
+      logTunnelLifecycle(tunnel);
+      return tunnel;
+    } catch (fallbackError) {
+      console.error('Não foi possível iniciar o localtunnel mesmo após tentativa de fallback.', fallbackError?.message || fallbackError);
+      throw fallbackError;
+    }
+  }
+}
+
+function logTunnelLifecycle(tunnel) {
   console.log(`LocalTunnel ativo em ${tunnel.url}`);
 
   tunnel.on('close', () => {
     console.log('LocalTunnel encerrado');
   });
-
-  return tunnel;
 }
 
 startServer().catch((error) => {
