@@ -10,6 +10,8 @@ const workSchema = new mongoose.Schema(
     endDate: { type: Date },
 
     numbered: { type: Boolean },
+
+    numbered: { type: Boolean },
     chopped: { type: Boolean },
     routes: { type: String },
 
