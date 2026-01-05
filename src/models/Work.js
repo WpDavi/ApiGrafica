@@ -9,7 +9,7 @@ const workSchema = new mongoose.Schema(
     startDate: { type: Date },
     endDate: { type: Date },
 
-    numbered: { type: Boolean },
+    paid: { type: Boolean },
 
     numbered: { type: Boolean },
     chopped: { type: Boolean },
