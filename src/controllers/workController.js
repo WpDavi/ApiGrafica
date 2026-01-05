@@ -9,6 +9,7 @@ function normalizeWork(work) {
     designer: work.designer,
     startDate: work.startDate,
     endDate: work.endDate,
+    paid: work.paid,
     numbered: work.numbered,
     chopped: work.chopped,
     routes: work.routes,
@@ -102,6 +103,7 @@ async function createWork(req, res) {
     chopped,
     routes,
     amount,
+    paid,
     amount2,
     amount3,
     amount4,
@@ -163,6 +165,7 @@ async function createWork(req, res) {
       designer,
       startDate: startDate ? new Date(startDate) : undefined,
       endDate: endDate ? new Date(endDate) : undefined,
+      paid,
       numbered,
       chopped,
       routes,
@@ -288,6 +291,7 @@ async function updateWork(req, res) {
     designer === undefined &&
     startDate === undefined &&
     endDate === undefined &&
+    paid === undefined &&
     amount === undefined &&
     numbered === undefined &&
     chopped === undefined &&
@@ -363,6 +367,7 @@ async function updateWork(req, res) {
         ...(endDate !== undefined
           ? { endDate: endDate ? new Date(endDate) : null }
           : {}),
+        ...(paid !== undefined ? { paid } : {}),
         ...(numbered !== undefined ? { numbered } : {}),
         ...(chopped !== undefined ? { chopped } : {}),
         ...(routes !== undefined ? { routes } : {}),
