@@ -13,6 +13,7 @@ function normalizeWork(work) {
     numbered: work.numbered,
     chopped: work.chopped,
     routes: work.routes,
+    format: work.format,
     amount: work.amount,
     materialType: work.materialType,
     finish: work.finish,
@@ -102,6 +103,7 @@ async function createWork(req, res) {
     numbered,
     chopped,
     routes,
+    format,
     amount,
     paid,
     amount2,
@@ -169,6 +171,7 @@ async function createWork(req, res) {
       numbered,
       chopped,
       routes,
+      format: format || undefined,
       amount: amount,
       amount2: amount2,
       amount3: amount3,
@@ -236,6 +239,7 @@ async function updateWork(req, res) {
     numbered,
     chopped,
     routes,
+    format,
     amount,
     amount2,
     amount3,
@@ -296,6 +300,7 @@ async function updateWork(req, res) {
     numbered === undefined &&
     chopped === undefined &&
     routes === undefined &&
+    format === undefined &&
     amount2 === undefined &&
     amount3 === undefined &&
     amount4 === undefined &&
@@ -371,6 +376,7 @@ async function updateWork(req, res) {
         ...(numbered !== undefined ? { numbered } : {}),
         ...(chopped !== undefined ? { chopped } : {}),
         ...(routes !== undefined ? { routes } : {}),
+        ...(format !== undefined ? { format } : {}),
         ...(amount !== undefined ? { amount: Number(amount) } : {}),
         ...(amount2 !== undefined ? { amount2: Number(amount2) } : {}),
         ...(amount3 !== undefined ? { amount3: Number(amount3) } : {}),
