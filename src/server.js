@@ -12,7 +12,10 @@ async function startServer() {
 
   const app = express();
   app.use(cors());
-  app.use(express.json());
+
+  const jsonLimit = process.env.JSON_LIMIT || "10mb";
+  app.use(express.json({ limit: jsonLimit }));
+  app.use(express.urlencoded({ extended: true, limit: jsonLimit }));
 
   app.get("/", (_req, res) => {
     res.json({
