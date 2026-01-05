@@ -1,5 +1,14 @@
 const { Work } = require("../db");
 
+function parseValue(value) {
+  const numeric = Number(value);
+  return Number.isFinite(numeric) ? numeric : 0;
+}
+
+function calculateServiceValue(...values) {
+  return values.reduce((sum, value) => sum + parseValue(value), 0);
+}
+
 function normalizeWork(work) {
   return {
     id: work._id,
@@ -20,42 +29,49 @@ function normalizeWork(work) {
     description: work.description,
     serviceType: work.serviceType,
     measure: work.measure,
+    value: work.value,
     amount2: work.amount2,
     materialType2: work.materialType2,
     finish2: work.finish2,
     description2: work.description2,
     serviceType2: work.serviceType2,
     measure2: work.measure2,
+    value2: work.value2,
     amount3: work.amount3,
     materialType3: work.materialType3,
     finish3: work.finish3,
     description3: work.description3,
     serviceType3: work.serviceType3,
     measure3: work.measure3,
+    value3: work.value3,
     amount4: work.amount4,
     materialType4: work.materialType4,
     finish4: work.finish4,
     description4: work.description4,
     serviceType4: work.serviceType4,
     measure4: work.measure4,
+    value4: work.value4,
     amount5: work.amount5,
     materialType5: work.materialType5,
     finish5: work.finish5,
     description5: work.description5,
     serviceType5: work.serviceType5,
     measure5: work.measure5,
+    value5: work.value5,
     amount6: work.amount6,
     materialType6: work.materialType6,
     finish6: work.finish6,
     description6: work.description6,
     serviceType6: work.serviceType6,
     measure6: work.measure6,
+    value6: work.value6,
     amount7: work.amount7,
     materialType7: work.materialType7,
     finish7: work.finish7,
     description7: work.description7,
     serviceType7: work.serviceType7,
     measure7: work.measure7,
+    value7: work.value7,
     entryServiceValue: work.entryServiceValue,
     serviceValue: work.serviceValue,
     delyveryForecast: work.delyveryForecast,
@@ -112,6 +128,13 @@ async function createWork(req, res) {
     amount5,
     amount6,
     amount7,
+    value,
+    value2,
+    value3,
+    value4,
+    value5,
+    value6,
+    value7,
     materialType,
     materialType2,
     materialType3,
@@ -148,7 +171,6 @@ async function createWork(req, res) {
     measure6,
     measure7,
     entryServiceValue,
-    serviceValue,
     delyveryForecast,
     image,
   } = req.body;
@@ -160,6 +182,16 @@ async function createWork(req, res) {
   }
 
   try {
+    const totalServiceValue = calculateServiceValue(
+      value,
+      value2,
+      value3,
+      value4,
+      value5,
+      value6,
+      value7
+    );
+
     const work = await Work.create({
       status,
       name,
@@ -179,6 +211,13 @@ async function createWork(req, res) {
       amount5: amount5,
       amount6: amount6,
       amount7: amount7,
+      value: value,
+      value2: value2,
+      value3: value3,
+      value4: value4,
+      value5: value5,
+      value6: value6,
+      value7: value7,
       materialType: materialType || undefined,
       materialType2: materialType2 || undefined,
       materialType3: materialType3 || undefined,
@@ -215,7 +254,7 @@ async function createWork(req, res) {
       measure6: measure6,
       measure7: measure7,
       entryServiceValue: entryServiceValue || undefined,
-      serviceValue: serviceValue || undefined,
+      serviceValue: totalServiceValue,
       delyveryForecast: delyveryForecast || undefined,
       image: image || undefined,
     });
@@ -248,6 +287,13 @@ async function updateWork(req, res) {
     amount5,
     amount6,
     amount7,
+    value,
+    value2,
+    value3,
+    value4,
+    value5,
+    value6,
+    value7,
     materialType,
     materialType2,
     materialType3,
@@ -284,7 +330,6 @@ async function updateWork(req, res) {
     measure6,
     measure7,
     entryServiceValue,
-    serviceValue,
     delyveryForecast,
     image,
   } = req.body;
@@ -308,6 +353,13 @@ async function updateWork(req, res) {
     amount5 === undefined &&
     amount6 === undefined &&
     amount7 === undefined &&
+    value === undefined &&
+    value2 === undefined &&
+    value3 === undefined &&
+    value4 === undefined &&
+    value5 === undefined &&
+    value6 === undefined &&
+    value7 === undefined &&
     materialType === undefined &&
     materialType2 === undefined &&
     materialType3 === undefined &&
@@ -344,7 +396,6 @@ async function updateWork(req, res) {
     measure6 === undefined &&
     measure7 === undefined &&
     entryServiceValue === undefined &&
-    serviceValue === undefined &&
     delyveryForecast === undefined &&
     image === undefined
   ) {
@@ -359,6 +410,26 @@ async function updateWork(req, res) {
     if (!existing) {
       return res.status(404).json({ message: "Trabalho não encontrado" });
     }
+
+    const mergedValues = {
+      value: value !== undefined ? value : existing.value,
+      value2: value2 !== undefined ? value2 : existing.value2,
+      value3: value3 !== undefined ? value3 : existing.value3,
+      value4: value4 !== undefined ? value4 : existing.value4,
+      value5: value5 !== undefined ? value5 : existing.value5,
+      value6: value6 !== undefined ? value6 : existing.value6,
+      value7: value7 !== undefined ? value7 : existing.value7,
+    };
+
+    const totalServiceValue = calculateServiceValue(
+      mergedValues.value,
+      mergedValues.value2,
+      mergedValues.value3,
+      mergedValues.value4,
+      mergedValues.value5,
+      mergedValues.value6,
+      mergedValues.value7
+    );
 
     const updated = await Work.findByIdAndUpdate(
       req.params.id,
@@ -385,6 +456,13 @@ async function updateWork(req, res) {
         ...(amount5 !== undefined ? { amount5 } : {}),
         ...(amount6 !== undefined ? { amount6 } : {}),
         ...(amount7 !== undefined ? { amount7 } : {}),
+        ...(value !== undefined ? { value } : {}),
+        ...(value2 !== undefined ? { value2 } : {}),
+        ...(value3 !== undefined ? { value3 } : {}),
+        ...(value4 !== undefined ? { value4 } : {}),
+        ...(value5 !== undefined ? { value5 } : {}),
+        ...(value6 !== undefined ? { value6 } : {}),
+        ...(value7 !== undefined ? { value7 } : {}),
         ...(materialType !== undefined ? { materialType } : {}),
         ...(materialType2 !== undefined ? { materialType2 } : {}),
         ...(materialType3 !== undefined ? { materialType3 } : {}),
@@ -421,7 +499,7 @@ async function updateWork(req, res) {
         ...(measure6 !== undefined ? { measure6 } : {}),
         ...(measure7 !== undefined ? { measure7 } : {}),
         ...(entryServiceValue !== undefined ? { entryServiceValue } : {}),
-        ...(serviceValue !== undefined ? { serviceValue } : {}),
+        serviceValue: totalServiceValue,
         ...(delyveryForecast !== undefined ? { delyveryForecast } : {}),
         ...(image !== undefined ? { image } : {}),
       },
