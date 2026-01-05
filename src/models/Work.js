@@ -14,6 +14,7 @@ const workSchema = new mongoose.Schema(
     numbered: { type: Boolean },
     chopped: { type: Boolean },
     routes: { type: String },
+    format: { type: String },
 
     amount: { type: String },
     serviceType: { type: String, trim: true },
