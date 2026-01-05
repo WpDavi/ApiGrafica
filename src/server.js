@@ -15,7 +15,10 @@ async function startServer() {
   app.use(express.json());
 
   app.get("/", (_req, res) => {
-    res.json({ message: "API da gráfica operante", database: dbConfig.dbName });
+    res.json({
+      message: "API da gráfica operantee",
+      database: dbConfig.dbName,
+    });
   });
 
   const appStaticPath = path.join(__dirname, "public", "app");
