@@ -22,6 +22,7 @@ const workSchema = new mongoose.Schema(
     finish: { type: String, trim: true },
     description: { type: String },
     measure: { type: String },
+    value: { type: Number },
 
     amount2: { type: String },
     serviceType2: { type: String, trim: true },
@@ -29,6 +30,7 @@ const workSchema = new mongoose.Schema(
     finish2: { type: String, trim: true },
     description2: { type: String },
     measure2: { type: String },
+    value2: { type: Number },
 
     amount3: { type: String },
     serviceType3: { type: String, trim: true },
@@ -36,6 +38,7 @@ const workSchema = new mongoose.Schema(
     finish3: { type: String, trim: true },
     description3: { type: String },
     measure3: { type: String },
+    value3: { type: Number },
 
     amount4: { type: String },
     serviceType4: { type: String, trim: true },
@@ -43,6 +46,7 @@ const workSchema = new mongoose.Schema(
     finish4: { type: String, trim: true },
     description4: { type: String },
     measure4: { type: String },
+    value4: { type: Number },
 
     amount5: { type: String },
     serviceType5: { type: String, trim: true },
@@ -50,6 +54,7 @@ const workSchema = new mongoose.Schema(
     finish5: { type: String, trim: true },
     description5: { type: String },
     measure5: { type: String },
+    value5: { type: Number },
 
     amount6: { type: String },
     serviceType6: { type: String, trim: true },
@@ -57,6 +62,7 @@ const workSchema = new mongoose.Schema(
     finish6: { type: String, trim: true },
     description6: { type: String },
     measure6: { type: String },
+    value6: { type: Number },
 
     amount7: { type: String },
     serviceType7: { type: String, trim: true },
@@ -64,6 +70,7 @@ const workSchema = new mongoose.Schema(
     finish7: { type: String, trim: true },
     description7: { type: String },
     measure7: { type: String },
+    value7: { type: Number },
 
     entryServiceValue: { type: String },
     serviceValue: { type: String },
